@@ -8,3 +8,14 @@ def map_schema(line, schema):
         except:
             return
         return msg
+
+
+def add_loc_starttime(line):
+
+    try:
+        lon, lat, address, start_timestamp = [
+            line[i] for i in ["lat", "lon", "address", "start_timestamp"]]
+    except Exception as e:
+        print(e)
+        return
+    return dict(line)
