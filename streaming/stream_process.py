@@ -35,6 +35,42 @@ class Streamer:
 				ec2-3-222-199-83.compute-1.amazonaws.com:9092,ec2-3-212-207-21.compute-1.amazonaws.com:9092"
         self.sc.setLogLevel("ERROR")
 
+    def process_stream(self, rdd):
+        def detect_anomaly(sensor_readings, running_avg, std_dev):
+            anomalies = []
+            for x, (i, y) in zip(sensor_readings, enumerate(running_avg)):
+                upper_limit = running_avg[i-1] + 3*std_dev
+                lower_limit = running_avg[i-1] - 3*std_dev
+                if (x > upper_limit) or (x < lower_limit):
+                    anomalies.append(x)
+            return len(anomalies)
+
+        if rdd.isEmpty():
+
+            print("RDD is empty")
+        else:
+            df = rdd.toDF().cache()
+            w = (Window().partitionBy(col("id")).rowsBetween(-1, 1))
+            df = df.withColumn('rolling_average', F.avg("val").over(w))
+            agg_df = df.groupBy(['id']).agg(F.collect_list("val").alias("sensor_reading"), first("ts").cast('timestamp').alias("start_ts"), last(
+                "ts").cast('timestamp').alias("end_ts"), F.round(F.stddev("val"), 3).alias("std_temp"), F.collect_list("rolling_average").alias("rol_avg"))
+            agg_df.show()
+            anomaly_udf = udf(detect_anomaly, IntegerType())
+            processed_df = agg_df.withColumn("num_anomaly", anomaly_udf(
+                "sensor_reading", "rol_avg", "std_temp")).sort(desc("num_anomaly"))
+            final_df = processed_df.withColumn("anomaly", F.when(
+                F.col("num_anomaly") > 1, True).otherwise(False))
+            final_df = final_df.select(
+                "id", "start_ts", "end_ts", "std_temp", "num_anomaly", "anomaly")
+            try:
+                connector = PostgresConnector(
+                    "ec2-3-94-71-208.compute-1.amazonaws.com", "datanodedb", "datanode", "password")
+                connector.write(final_df, "anomaly_window_tbl", "append")
+
+            except Exception as e:
+                print(e)
+                pass
+
     def quiet_logs(self, sc):
         logger = sc._jvm.org.apache.log4j
         logger.LogManager.getLogger("org"). setLevel(logger.Level.ERROR)
