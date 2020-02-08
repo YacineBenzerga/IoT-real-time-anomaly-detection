@@ -42,3 +42,8 @@ class Producer(object):
                 msg = msg.encode('utf-8')
                 self.producer.produce(self.kafka_topic, msg)
             self.producer.flush()
+
+
+if __name__ == "__main__":
+    prod = Producer()
+    prod.produce_msgs()
