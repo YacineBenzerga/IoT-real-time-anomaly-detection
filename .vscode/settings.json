@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/yacinus/anaconda3/bin/python"
+    "python.pythonPath": "/home/yacinus/anaconda3/bin/python",
+    "python.linting.enabled": true
 }
