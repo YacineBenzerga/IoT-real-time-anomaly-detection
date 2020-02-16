@@ -7,7 +7,7 @@ import random
 class Producer(object):
 
     def __init__(self):
-        self.producer = confluent_kafka.Producer({'bootstrap.servers': 'localhost:9092,ip-10-0-0-7:9092,ip-10-0-0-9:9092',
+        self.producer = confluent_kafka.Producer({'bootstrap.servers': 'localhost:9092,ip-10-0-0-8:9092,ip-10-0-0-10:9092',
                                                   'linger.ms': 1, 'batch.num.messages': 10000, 'queue.buffering.max.messages': 45000})
         self.kafka_topic = 'temp_topic'
         self.mu = 32.0

@@ -147,3 +147,4 @@ dmypy.json
 
 # JSON Files
 .json
+settings.json
