@@ -5,7 +5,7 @@
 The goal of this project is to leverage IoT sensors to allow industrial companies the identification of malfunctioning assets by detecting usage anomalies in real time and enable predictive maintenance by detecting global usage anomalies in 24 hours time windows.
 
 
-## Data Sources
+## Approach
 To simulate an Industrial IoT environement. A kafka producer is streaming temperature recordings of 90 sensors at a rate of 27000 events/sec. the generated data follows a normal distribution for the assets functioning properly, and an exponential distribution as noise for the malfunctioing assets.   
 
 
