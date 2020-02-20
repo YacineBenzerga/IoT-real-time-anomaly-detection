@@ -1,0 +1,16 @@
+# Add to /etc/postgresql/10/main/pg_hba.conf
+host all all 0.0.0.0/0 md5
+host all all ::/0 md5
+
+# Create: user, database, password, .pgpass file (with 0400 permissions)
+# Execute to create user and database
+sudo -u postgres createuser datanode
+sudo -u postgres createdb datanodedb
+
+# Execute to configure permissions
+sudo -u postgres psql
+alter user datanode with encrypted password 'password';
+grant all privileges on database datanodedb to datanode ;
+
+# Restart PostgreSQL
+sudo service postgresql restart
