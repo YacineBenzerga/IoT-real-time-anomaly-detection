@@ -1,0 +1,31 @@
+
+#To create a cluster use the following template yaml file 
+
+purchase_type: on_demand
+subnet_id: <subnet_id>
+num_instances: <num_of_instances>
+key_name: <keypair_filename>
+security_group_ids: <security_group_ids>
+instance_type: m4.large
+tag_name: <cluster_name>
+vol_size: 100
+role: master / worker
+use_eips: true
+
+
+#To create a cluster
+>Run: 
+    peg up cluster-name master
+    peg up cluster-name workers
+    peg fetch cluster-name
+
+#To install technologies on a cluster
+>Run:
+    peg ssh cluster-name
+    peg install cluster-name technology
+
+
+#To start service
+>Run:
+    peg start cluster-name service 
+     
