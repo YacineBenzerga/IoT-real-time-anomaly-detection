@@ -1,7 +1,5 @@
 # Real-time anomaly detection in Industrial IoT sensors
-### Insight Data Engineering (New York 2020)
-#### Yacine Benzerga
-
+### Yacine Benzerga - Insight Data Engineering (New York 2020)
 
 The goal of this project is to leverage IoT sensors to allow industrial companies the identification of malfunctioning assets by detecting usage anomalies in real time and enable predictive maintenance by detecting global usage anomalies in 24 hours window.
 
