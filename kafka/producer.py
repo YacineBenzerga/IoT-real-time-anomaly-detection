@@ -8,7 +8,7 @@ class Producer(object):
 
     def __init__(self):
         self.producer = confluent_kafka.Producer({'bootstrap.servers': 'localhost:9092,ip-10-0-0-8:9092,ip-10-0-0-10:9092',
-                                                  'linger.ms': 1, 'batch.num.messages': 10000, 'queue.buffering.max.messages': 45000})
+                                                  'linger.ms': 1, 'batch.num.messages': 3000, 'queue.buffering.max.messages': 10000})
         self.kafka_topic = 'temp_topic'
         self.mu = 32.0
         self.sigma = 0.1
@@ -26,11 +26,9 @@ class Producer(object):
         while True:
             t = time.strftime('%Y-%m-%dT%H:%M:%S')
             millis = "%.3d" % (time.time() % 1 * 1000)
-            for i in range(1, 50):
+            for i in range(1, 90):
                 sensor_id = i
-            # Signal generation
                 signal = random.gauss(self.mu, self.sigma)
-                # Simulate deficient sensors
                 malfunc_sens = [7, 10, 22, 37]
                 if i in malfunc_sens:
                     noise = random.expovariate(0.03)

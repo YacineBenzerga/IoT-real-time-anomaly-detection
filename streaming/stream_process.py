@@ -1,4 +1,6 @@
-from pgConnector import PostgresConnector
+import sys
+sys.path.append("./postgres/")
+import pgConnector
 from pyspark.sql import SparkSession, SQLContext, Row, DataFrame, SQLContext, functions as F
 from json import loads
 from pyspark.streaming.kafka import KafkaUtils
@@ -22,15 +24,11 @@ class Streamer:
         self.sc_cfg.set("spark.executor.cores", "2")
         self.sc_cfg.set("spark.executor.instances", "15")
         self.sc_cfg.set("spark.driver.memory", "5000m")
-        self.sc_cfg.set("spark.locality.wait", 100)
-        self.sc_cfg.set("spark.executor.extraJavaOptions",
-                        "-XX:+UseConcMarkSweepGC")
 
-        #self.sc_cfg.set("spark.streaming.backpressure.enabled", 'True')
         self.sc = SparkContext(conf=self.sc_cfg).getOrCreate("anomaly_detect")
         self.ssc = StreamingContext(self.sc, 2.5)
         self.spark = SparkSession(self.sc)
-        self.kafka_topic = 'confluent_topic'
+        self.kafka_topic = 'temp_topic'
         self.kfk_brokers_ip = "ec2-3-210-59-51.compute-1.amazonaws.com:9092, \
 				ec2-52-2-252-109.compute-1.amazonaws.com:9092,ec2-52-86-201-163.compute-1.amazonaws.com:9092"
         self.sc.setLogLevel("ERROR")
@@ -63,18 +61,13 @@ class Streamer:
             final_df = final_df.select(
                 "id", "start_ts", "end_ts", "std_temp", "num_anomaly", "anomaly")
             try:
-                connector = PostgresConnector(
+                connector = pgConnector.PostgresConnector(
                     "ec2-3-94-71-208.compute-1.amazonaws.com", "datanodedb", "datanode", "password")
                 connector.write(final_df, "anomaly_window_tbl", "append")
 
             except Exception as e:
                 print(e)
                 pass
-
-    def quiet_logs(self, sc):
-        logger = sc._jvm.org.apache.log4j
-        logger.LogManager.getLogger("org"). setLevel(logger.Level.ERROR)
-        logger.LogManager.getLogger("akka").setLevel(logger.Level.ERROR)
 
     def init_stream(self):
         self.kafkaStream = KafkaUtils.createDirectStream(
@@ -84,7 +77,6 @@ class Streamer:
 
     def start_stream(self):
         self.init_stream()
-        self.quiet_logs(self.sc)
         self.ssc.start()
         self.ssc.awaitTermination()
 
