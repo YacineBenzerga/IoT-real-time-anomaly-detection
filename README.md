@@ -36,9 +36,9 @@ Install and configure [AWS CLI](https://aws.amazon.com/cli/) and [Pegasus](https
 -(Spark): aws, hadoop, spark
 -(Kafka): aws, hadoop, zookeeper, kafka
 
--Install Postgres with Timescale extension using(https://docs.timescale.com/latest/getting-started/installation/ubuntu/installation-apt-ubuntu)
+-Install Postgres with Timescale extension using(https://docs.timescale.com/latest/getting-started/installation/ubuntu/installation-apt-ubuntu) then follow instructions in `docs/postgres.txt`
 
--Airflow scheduler can be installed on the master node of Spark-Cluster.Follow the instructions in `docs/airflow_install.txt` to install and launch the Airflow server.
+-Airflow scheduler can be installed on the master node of Spark-Cluster.Follow the instructions in `docs/airflow.txt` to install and launch the Airflow server.
 
 
 
