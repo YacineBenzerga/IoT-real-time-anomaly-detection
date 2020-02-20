@@ -25,10 +25,10 @@ Install and configure [AWS CLI](https://aws.amazon.com/cli/) and [Pegasus](https
 `git clone https://github.com/YacineBenzerga/IoT-real-time-anomaly-detection`.
 
 #### SET UP CLUSTER:
-- (4 nodes) Spark-Cluster 
-- (3 nodes) Kafka-Cluster
-- (1 node) PostgreSQL(Timescale)
-- (1 node) Dash 
+- (4 nodes) Spark-Cluster, instance type: m4.large
+- (3 nodes) Kafka-Cluster , instance type: m4.large
+- (1 node) PostgreSQL(Timescale) , instance type: m4.large
+- (1 node) Dash , instance type: t2.micro
 
 -Follow the instructions in `docs/pegasus.txt` to create required clusters, install and start technologies
 
@@ -58,6 +58,7 @@ Run`peg ssh kafka-cluster 1`
 -Download spark-streaming-kafka-0-8_2.11:2.2.0 and postgresql-42.2.2.jar files to your spark-cluster master node
 
 -The batch processing job in Spark depends on numpy, pandas and stldecompose libraries that have to be shared accross spark workers.
+
 -Run `/bash_scripts/dist_spark_dependancies.sh` to get the required (mypkg.zip) file that will be included in the spark-submit command
 
 ### Start streaming
@@ -80,6 +81,7 @@ Airflow scheduler is installed on the master node of Spark-cluster:
 
 `airflow/schedule.sh`
 
-###Dash
+### Frontend-Dash
 `peg ssh dash 1`
+
 `python ./frontend/app.py`
