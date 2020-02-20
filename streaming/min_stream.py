@@ -1,4 +1,7 @@
-from pgConnector import PostgresConnector
+import sys
+sys.path.append("./postgres/")
+import pgConnector
+
 from pyspark.sql import SparkSession, SQLContext
 from json import loads
 from pyspark.streaming.kafka import KafkaUtils
@@ -8,7 +11,7 @@ import time
 from pyspark.sql.functions import col, udf, window
 
 
-class Streamer:
+class Min_streamer:
 
     def __init__(self):
         """
@@ -28,7 +31,7 @@ class Streamer:
         self.sc = SparkContext(conf=self.sc_cfg).getOrCreate("timescaleWrite")
         self.ssc = StreamingContext(self.sc, 10)
         self.spark = SparkSession(self.sc)
-        self.kafka_topic = 'all_topic'
+        self.kafka_topic = 'temp_topic'
         self.kfk_brokers_ip = "ec2-3-210-59-51.compute-1.amazonaws.com:9092, \
 				ec2-52-2-252-109.compute-1.amazonaws.com:9092,ec2-52-86-201-163.compute-1.amazonaws.com:9092"
         self.sc.setLogLevel("ERROR")
@@ -47,18 +50,13 @@ class Streamer:
 
             # write to timescale
             try:
-                connector = PostgresConnector(
+                connector = pgConnector.PostgresConnector(
                     "ec2-3-94-71-208.compute-1.amazonaws.com", "datanodedb", "datanode", "password")
                 connector.write(final_df, "downsampled_table", "append")
 
             except Exception as e:
                 print(e)
                 pass
-
-    def quiet_logs(self, sc):
-        logger = sc._jvm.org.apache.log4j
-        logger.LogManager.getLogger("org"). setLevel(logger.Level.ERROR)
-        logger.LogManager.getLogger("akka").setLevel(logger.Level.ERROR)
 
     def init_stream(self):
         self.kafkaStream = KafkaUtils.createDirectStream(
@@ -68,11 +66,10 @@ class Streamer:
 
     def start_stream(self):
         self.init_stream()
-        self.quiet_logs(self.sc)
         self.ssc.start()
         self.ssc.awaitTermination()
 
 
 if __name__ == "__main__":
-    streamer = Streamer()
+    streamer = Min_streamer()
     streamer.start_stream()

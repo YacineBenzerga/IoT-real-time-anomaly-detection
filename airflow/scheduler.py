@@ -20,11 +20,11 @@ default_args = {
 dag = DAG(
     'batch_scheduler',
     default_args=default_args,
-    description='DAG: Raw data Spark ETL batch Job',
+    description='DAG: Spark batch Job',
     schedule_interval=schedule_interval)
 
 
 task = BashOperator(
     task_id='run_batch_job',
-    bash_command='cd /home/ubuntu/DataNode/ ; ./spark-run.sh --batch',
+    bash_command='cd /home/ubuntu/DataNode/bash_scripts ; ./spark_batch_run.sh',
     dag=dag)
