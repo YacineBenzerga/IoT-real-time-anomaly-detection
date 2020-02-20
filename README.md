@@ -7,6 +7,9 @@ The goal of this project is to leverage IoT sensors to allow industrial companie
 ## Approach
 To simulate an Industrial IoT environement. A kafka producer is streaming temperature recordings of 90 sensors at a rate of 27000 events/sec. the generated data follows a normal distribution for the assets functioning properly, and a combined normal, exponential distribution as noise for the malfunctioning assets.   
 
+## Architecure
+
+![Pipeline Architecture](docs/final_pipeline.jpeg)
 
 
 ***Streaming***: real-time sensor observations are streamed by Kafka into Spark Streaming, which handles two tasks: 
