@@ -10,7 +10,7 @@ To simulate an Industrial IoT environement. A kafka producer is streaming temper
 
 
 ***Streaming***: real-time sensor observations are streamed by Kafka into Spark Streaming, which handles two tasks: 
- 1.detecting anomalies using an offline High-low pass filter algorithm and write the results to  anomaly_window_tbl in Timescale.
+ 1.detecting anomalies in each sensor every 3 seconds using an offline High-low pass filter algorithm and write the results to  anomaly_window_tbl in Timescale.
  
 2.Preprocess & downsample generated data and writes to downsampled_table in Timescale.
 
