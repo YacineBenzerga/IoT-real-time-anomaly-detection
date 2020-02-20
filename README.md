@@ -21,7 +21,7 @@ To simulate an Industrial IoT environement. A kafka producer is streaming temper
 2.Preprocess & downsample generated data and writes to downsampled_table in Timescale.
 
 
-***Batch***: downsampled data is then ingested every 24 hours using Airflow from Timescale to Spark, where global anomlies are detected using Twitter hybrid Seasonal ESD, and results are saved back to Timescale in global_anomalies_table
+***Batch***: downsampled data is then ingested every 24 hours using Airflow from Timescale to Spark, where global anomlies are detected using a python [implementation](https://github.com/nachonavarro/seasonal-esd-anomaly-detection) of Twitter hybrid Seasonal ESD, and results are saved back to Timescale in global_anomalies_table
 
 ## Instructions 
 
