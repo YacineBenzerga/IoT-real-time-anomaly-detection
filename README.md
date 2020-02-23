@@ -64,7 +64,7 @@ Run`peg ssh kafka-cluster 1`
 ### Required jar files and dependancies
 -Download spark-streaming-kafka-0-8_2.11:2.2.0 and postgresql-42.2.2.jar files to your spark-cluster master node
 
--The batch processing job in Spark depends on numpy, pandas and stldecompose libraries that have to be shared accross spark workers.
+-The batch processing job in Spark depends on numpy, pandas and stldecompose libraries that have to be shared accross Spark workers.
 
 -Run `/bash_scripts/dist_spark_dependancies.sh` to get the required (mypkg.zip) file that will be included in the spark-submit command
 
