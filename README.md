@@ -16,7 +16,7 @@ To simulate an Industrial IoT environement. A kafka producer is streaming temper
 
 
 ***Streaming***: real-time sensor observations are streamed by Kafka into Spark Streaming, which handles two tasks: 
- 1.detecting anomalies in each sensor every 3 seconds using an offline High-low pass filter algorithm and write the results to  anomaly_window_tbl in Timescale.
+ 1.detecting anomalies in each sensor every 5 seconds using an offline High-low pass filter algorithm and write the results to  anomaly_window_tbl in Timescale.
  
 2.Preprocess & downsample generated data and writes to downsampled_table in Timescale.
 
@@ -56,9 +56,9 @@ the command `peg ssh cluster-name 1`
 ### Setting up Kafka
 Run`peg ssh kafka-cluster 1`
 
--Create a kafka topic with 9 partitions and a replication factor of 3 using the following command:
+-Create a kafka topic with 9 partitions and a replication factor of 2 using the following command:
 
-`/usr/local/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 --partitions 9 --topic temp_topic`
+`/usr/local/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 2 --partitions 9 --topic temp_topic`
 
 ### Required jar files and dependancies
 -Download spark-streaming-kafka-0-8_2.11:2.2.0 and postgresql-42.2.2.jar files to your spark-cluster master node
