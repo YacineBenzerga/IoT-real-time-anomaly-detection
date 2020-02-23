@@ -1,14 +1,13 @@
+from pyspark.sql.functions import col, udf, window
+import time
+from pyspark import SparkContext, SparkConf
+from pyspark.streaming import StreamingContext
+from pyspark.streaming.kafka import KafkaUtils
+from json import loads
+from pyspark.sql import SparkSession, SQLContext
+import pgConnector
 import sys
 sys.path.append("./postgres/")
-import pgConnector
-
-from pyspark.sql import SparkSession, SQLContext
-from json import loads
-from pyspark.streaming.kafka import KafkaUtils
-from pyspark.streaming import StreamingContext
-from pyspark import SparkContext, SparkConf
-import time
-from pyspark.sql.functions import col, udf, window
 
 
 class Min_streamer:
@@ -19,13 +18,13 @@ class Min_streamer:
         """
         self.sc_cfg = SparkConf()
         self.sc_cfg.setAppName("timescaleWrite")
-        self.sc_cfg.set("spark.executor.memory", "1000m")
+        self.sc_cfg.set("spark.executor.memory", "1100m")
         self.sc_cfg.set("spark.executor.cores", "2")
-        self.sc_cfg.set("spark.executor.instances", "15")
-        self.sc_cfg.set("spark.driver.memory", "5000m")
-        self.sc_cfg.set("spark.locality.wait", 100)
-        self.sc_cfg.set("spark.executor.extraJavaOptions",
-                        "-XX:+UseConcMarkSweepGC")
+        self.sc_cfg.set("spark.executor.instances", "9")
+        #self.sc_cfg.set("spark.driver.memory", "5000m")
+        #self.sc_cfg.set("spark.locality.wait", 10)
+        # self.sc_cfg.set("spark.executor.extraJavaOptions",
+        #               "-XX:+UseConcMarkSweepGC")
 
         #self.sc_cfg.set("spark.streaming.backpressure.enabled", 'True')
         self.sc = SparkContext(conf=self.sc_cfg).getOrCreate("timescaleWrite")
@@ -61,7 +60,8 @@ class Min_streamer:
     def init_stream(self):
         self.kafkaStream = KafkaUtils.createDirectStream(
             self.ssc, [self.kafka_topic],  {"metadata.broker.list": self.kfk_brokers_ip})
-        self.rdd = self.kafkaStream.map(lambda x: loads(x[1].decode('utf-8')))
+        self.rdd = self.kafkaStream.repartition(9).map(
+            lambda x: loads(x[1].decode('utf-8')))
         self.rdd.foreachRDD(lambda rdd: self.process_stream(rdd))
 
     def start_stream(self):
