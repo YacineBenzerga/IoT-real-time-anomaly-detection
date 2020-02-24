@@ -41,7 +41,7 @@ Install and configure [AWS CLI](https://aws.amazon.com/cli/) and [Pegasus](https
 
 >Required technologies per cluster
 -(Spark): aws, hadoop, spark
--(Kafka): aws, hadoop, zookeeper, kafka
+-(Kafka): aws, zookeeper, kafka
 
 -Install Postgres with Timescale extension using this [link](https://docs.timescale.com/latest/getting-started/installation/ubuntu/installation-apt-ubuntu) then follow instructions in `docs/postgres.txt`
 
