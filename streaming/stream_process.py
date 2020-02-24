@@ -20,7 +20,7 @@ class Streamer:
         """
         self.sc_cfg = SparkConf()
         self.sc_cfg.setAppName("IoTAnomalyDetect")
-        self.sc_cfg.set("spark.executor.memory", "1700m")
+        self.sc_cfg.set("spark.executor.memory", "2700m")
         self.sc_cfg.set("spark.executor.cores", "2")
         self.sc_cfg.set("spark.executor.instances", "9")
         self.sc_cfg.set("spark.driver.memory", "5000m")
