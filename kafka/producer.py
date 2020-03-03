@@ -14,6 +14,14 @@ class Producer(object):
         self.sigma = 0.1
 
     def create_msg(self, sensor_id, timestamp, millis, val):
+        """
+        Args:
+            sensor_id: int, 
+            timestamp: timestamp, 
+            millis:int, 
+            val:float
+        :rtype: dict
+        """
         msg = {}
         msg["id"] = sensor_id
         msg["ts"] = timestamp

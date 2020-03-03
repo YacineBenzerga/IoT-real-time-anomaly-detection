@@ -44,6 +44,10 @@ app.layout = html.Div([
 
 @app.callback(Output('graph', 'figure'), [Input('interval-component', 'n_intervals')])
 def update_map(n):
+    """
+    Args n: int
+    :rtype: dict
+    """
     try:
         latest_reading = "select id, start_ts, std_temp, rol_avg_read, num_anomaly, anomaly from anomaly_tbl order by start_ts desc, num_anomaly desc limit 90;"
         df_map = pd.read_sql(latest_reading, conn)
@@ -115,6 +119,10 @@ def update_map(n):
 
 @app.callback(Output('bar-graph', 'figure'), [Input('interval-component', 'n_intervals')])
 def update_bar_graph(n):
+     """
+    Args n: int
+    :rtype: dict
+    """
     try:
 
         tot_anomalies_per_sensor = "select id, sum(num_anomaly) AS tot_anom from anomaly_window_tbl group by id order by tot_anom desc limit 10;"

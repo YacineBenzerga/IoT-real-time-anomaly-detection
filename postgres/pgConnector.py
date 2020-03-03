@@ -14,5 +14,12 @@ class PostgresConnector(object):
         }
 
     def write(self, df, table, md):
+        """
+        Args:
+            df: pandas.dataframe
+            table: str
+            md: str 
+        :rtype: None
+        """
         writer = DataFrameWriter(df)
         writer.jdbc(self.url_connect, table, md, self.properties)

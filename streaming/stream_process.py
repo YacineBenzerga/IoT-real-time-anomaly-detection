@@ -24,13 +24,6 @@ class Streamer:
         self.sc_cfg.set("spark.executor.cores", "2")
         self.sc_cfg.set("spark.executor.instances", "9")
         self.sc_cfg.set("spark.driver.memory", "5000m")
-        # self.sc_cfg.set("spark.locality.wait", 5)
-        # Garbage collection
-        # self.sc_cfg.set("spark.executor.extraJavaOptions",
-        #               "-XX:+UseConcMarkSweepGC")
-
-        # self.sc_cfg.set("spark.streaming.backpressure.enabled", 'True')
-
         self.sc = SparkContext(conf=self.sc_cfg).getOrCreate("anomaly_detect")
         self.ssc = StreamingContext(self.sc, 5)
         self.spark = SparkSession(self.sc)
@@ -40,7 +33,18 @@ class Streamer:
         self.sc.setLogLevel("ERROR")
 
     def process_stream(self, rdd):
+        """
+        Args rdd: rdd
+        :rtype: None
+        """
         def detect_anomaly(sensor_readings, running_avg, std_dev):
+            """
+            Args:
+                sensor_readings: List(float)
+                running_avg: float
+                std_dev: float
+            :rtype: int
+            """
             anomalies = []
             for x, (i, y) in zip(sensor_readings, enumerate(running_avg)):
                 upper_limit = running_avg[i-1] + 3*std_dev

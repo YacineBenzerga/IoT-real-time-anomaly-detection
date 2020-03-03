@@ -21,12 +21,6 @@ class Min_streamer:
         self.sc_cfg.set("spark.executor.memory", "1100m")
         self.sc_cfg.set("spark.executor.cores", "2")
         self.sc_cfg.set("spark.executor.instances", "9")
-        #self.sc_cfg.set("spark.driver.memory", "5000m")
-        #self.sc_cfg.set("spark.locality.wait", 10)
-        # self.sc_cfg.set("spark.executor.extraJavaOptions",
-        #               "-XX:+UseConcMarkSweepGC")
-
-        #self.sc_cfg.set("spark.streaming.backpressure.enabled", 'True')
         self.sc = SparkContext(conf=self.sc_cfg).getOrCreate("timescaleWrite")
         self.ssc = StreamingContext(self.sc, 10)
         self.spark = SparkSession(self.sc)
@@ -36,6 +30,10 @@ class Min_streamer:
         self.sc.setLogLevel("ERROR")
 
     def process_stream(self, rdd):
+        """
+         Args rdd: rdd
+        :rtype: None
+        """
         if rdd.isEmpty():
             print("RDD is empty")
         else:
