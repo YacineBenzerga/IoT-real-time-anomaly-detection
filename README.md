@@ -91,4 +91,4 @@ Airflow scheduler is installed on the master node of Spark-cluster:
 ### Frontend-Dash
 `peg ssh dash 1`
 
-`python ./frontend/app.py`
+`nohup python ./frontend/app.py`
